@@ -1,7 +1,9 @@
 package com.example.security.demo.controller;
 
 
+import com.example.security.demo.DTO.DestinatarioDTO;
 import com.example.security.demo.DTO.UserDTO;
+import com.example.security.demo.model.Destinatarios;
 import com.example.security.demo.model.UserEntity;
 import com.example.security.demo.service.UserService;
 import lombok.extern.flogger.Flogger;
@@ -106,6 +108,24 @@ public class UserController {
 
         return new ResponseEntity<>(userDTO, HttpStatusCode.valueOf(200));
     }
+
+
+    @PostMapping(
+            value = "/user/v5"
+    )
+    public ResponseEntity<?> transferencias(@RequestBody UserEntity userEntity, @RequestBody Destinatarios destinatario){
+        try{
+              if(this.userService.transfer(userEntity,destinatario)){
+                  return new ResponseEntity(HttpStatusCode.valueOf(200));
+              }
+            return new ResponseEntity(HttpStatusCode.valueOf(400));
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+
+
 
     private double automatizarSalario(String email){
         return email.length() > 4?50000 : 20000;

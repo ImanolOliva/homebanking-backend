@@ -1,10 +1,13 @@
 package com.example.security.demo.service;
 
 
+import com.example.security.demo.DTO.DestinatarioDTO;
 import com.example.security.demo.DTO.UserDTO;
 import com.example.security.demo.Exepciones.ErroresCustom;
 import com.example.security.demo.Exepciones.PasswordErronea;
+import com.example.security.demo.model.Destinatarios;
 import com.example.security.demo.model.UserEntity;
+import com.example.security.demo.repository.DestinatariosRepository;
 import com.example.security.demo.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.hibernate.action.internal.EntityActionVetoException;
@@ -21,6 +24,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private DestinatariosRepository destinatariosRepository;
 
 
     public UserEntity saveUser(UserEntity userEntity){
@@ -81,6 +87,12 @@ public class UserService {
         return false;
     }
 
+    public boolean transfer(UserEntity userEntity,Destinatarios destinatario){
+        this.destinatariosRepository.save(destinatario);
+        destinatario.setSalary(destinatario.getSalary() + userEntity.getSalary());
+        userEntity.setSalary(userEntity.getSalary()-destinatario.getSalary());
+        return true;
+    }
 
 
 

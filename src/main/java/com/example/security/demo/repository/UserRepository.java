@@ -1,6 +1,7 @@
 package com.example.security.demo.repository;
 
 
+import com.example.security.demo.model.Destinatarios;
 import com.example.security.demo.model.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -23,5 +24,7 @@ public interface UserRepository extends JpaRepository<UserEntity,Long> {
     UserEntity findBySalary(Double salary);
 
     UserEntity findById(Double id);
+
+
 
 }
