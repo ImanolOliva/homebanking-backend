@@ -1,23 +1,19 @@
 package com.example.security.demo.controller;
 
 
-import com.example.security.demo.DTO.DestinatarioDTO;
-import com.example.security.demo.DTO.UserDTO;
-import com.example.security.demo.model.Destinatarios;
+import com.example.security.demo.DTO.*;
+import com.example.security.demo.model.Movimientos;
 import com.example.security.demo.model.UserEntity;
 import com.example.security.demo.service.UserService;
 import lombok.extern.flogger.Flogger;
-import org.apache.catalina.User;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.FileDescriptor;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -43,30 +39,25 @@ public class UserController {
         String gmail = userDTO.getEmail();
         Integer password = userDTO.getPassword();
 
-        double salarioAutomatizado = automatizarSalario(String.valueOf(userDTO.getEmail()));
-        userDTO.setSalary(salarioAutomatizado);
+        //Obtengo el nombre de la base de datos
+        //Para trabajarlo de forma dinamica en pantalla
 
         String userName =  this.userService.findUsernameByEmail(userDTO.getEmail());
         userDTO.setUserName(userName);
 
+        //Obtengo el salario de la base de datos
+        //Para trabajarlo de forma dinamica en pantalla
+        Double salary = this.userService.findSalary(userDTO.getEmail());
+        userDTO.setSalary(salary);
+
+        //Pregunto si existe en bd y lo devuelvo
         if(this.userService.existeUser(gmail,password)){
+            this.getMenuItem();
             return  ResponseEntity.ok(userDTO);
         }
+
         return new ResponseEntity("El usuario no se encuetra registrado o las credenciales son incorrectas",HttpStatusCode.valueOf(404));
     }
-
-
-    @GetMapping(  path =  "/user")
-    public ResponseEntity<?> getAllUsers(UserEntity userEntity){
-        List<UserEntity> listUser =   this.userService.getAllUser(userEntity);
-
-        if(listUser == null){
-            return new ResponseEntity<>("No existen personas registradas",HttpStatusCode.valueOf(200));
-        }
-        return new ResponseEntity<>(listUser,HttpStatusCode.valueOf(200));
-    }
-
-
     @PostMapping(
             path= "/user/v3"
     )
@@ -85,6 +76,13 @@ public class UserController {
         //Guardo los datos actualizados en la base de datos
         this.userService.updateUser(userDTO);
 
+        //Voy armando la tabla de transacciones
+        Movimientos movimientos = new Movimientos();
+        movimientos.setMonto(userDTO.getSalary());
+        movimientos.setFechaEnvio(new Date());
+        movimientos.setTitular(userDTO.getEmail());
+        movimientos.setTipoOperacion("EXTRACCION");
+        this.userService.saveOperaciones(movimientos);
         return new ResponseEntity<>(userDTO, HttpStatusCode.valueOf(200));
     }
 
@@ -105,31 +103,92 @@ public class UserController {
         userDTO.setSalary(salaryBd+userDTO.getSalary());
         //Guardo los datos actualizados en la base de datos
         this.userService.updateUser(userDTO);
+        //Voy armando la tabla de transacciones
+        Movimientos movimientos = new Movimientos();
+        movimientos.setMonto(userDTO.getSalary());
+        movimientos.setFechaEnvio(new Date());
+        movimientos.setTitular(userDTO.getEmail());
+        movimientos.setTipoOperacion("DEPOSITO");
+        this.userService.saveOperaciones(movimientos);
 
         return new ResponseEntity<>(userDTO, HttpStatusCode.valueOf(200));
     }
 
 
     @PostMapping(
-            value = "/user/v5"
+            path = "/user/v5"
     )
-    public ResponseEntity<?> transferencias(@RequestBody UserEntity userEntity, @RequestBody Destinatarios destinatario){
+    public ResponseEntity<UserDTO> transferencias(@RequestBody TransferenciaDTO transferenciaDTO){
+        Double cbu = transferenciaDTO.getCbu();
+
+        Double dinero = transferenciaDTO.getDinero();
+        String email = transferenciaDTO.getEmail();
+        Double salaryBd = this.userService.findSalary(email);
+        salaryBd = salaryBd - dinero;
+
+
+        //Actualizo los datos en la tabla
+        UserDTO userDTO = new UserDTO();
+        userDTO.setEmail(email);
+        userDTO.setSalary(salaryBd);
+        this.userService.updateUser(userDTO);
+
+        //Voy armando la tabla de transacciones
+        Movimientos movimientos = new Movimientos();
+        movimientos.setMonto(userDTO.getSalary());
+        movimientos.setFechaEnvio(new Date());
+        movimientos.setDestino(cbu);
+        movimientos.setTitular(userDTO.getEmail());
+        movimientos.setTipoOperacion("TRANSFERENCIA");
+        this.userService.saveOperaciones(movimientos);
+        return new ResponseEntity(userDTO,HttpStatusCode.valueOf(200));
+    }
+    @PostMapping(  path = "/user/v6")
+    public List<Movimientos> getAllUsers(@RequestBody UserDTO userDTO){
         try{
-              if(this.userService.transfer(userEntity,destinatario)){
-                  return new ResponseEntity(HttpStatusCode.valueOf(200));
-              }
-            return new ResponseEntity(HttpStatusCode.valueOf(400));
-        }catch (Exception e){
+            List<Movimientos> movimientosList;
+            movimientosList = this.userService.gettAllListMovimientos(userDTO);
+            return  movimientosList;
+        }catch(Exception e) {
             return null;
         }
+
     }
 
+    @GetMapping(
+            path = "/user/v7"
+    )
+    public List<MenuItemDTO> getMenuItem(){
+
+        List<MenuItemDTO> rutas = new ArrayList<>();
+        rutas.add(new MenuItemDTO("Inicio","/home"));
+        rutas.add(new MenuItemDTO("Balance", "/salary"));
+        rutas.add(new MenuItemDTO("Retiro dinero", "/withdrawal"));
+        rutas.add(new MenuItemDTO("Deposito","/deposit"));
+        rutas.add(new MenuItemDTO("Tranferencias","/transfers"));
+        rutas.add(new MenuItemDTO("Ultimos movimientos","/transacciones"));
+        rutas.add(new MenuItemDTO("Tarjetas","/tarjeta"));
+        rutas.add(new MenuItemDTO("Salida","/go-out"));
+
+        return rutas;
+    }
+
+
+    @GetMapping(
+            path = "/user/v8"
+    )
+    public TarjetasDTO getTarjetas(){
+
+
+    }
 
 
 
     private double automatizarSalario(String email){
         return email.length() > 4?50000 : 20000;
     }
+
+
 
 
 }

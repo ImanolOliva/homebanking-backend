@@ -10,18 +10,26 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Destinatarios {
+public class Movimientos {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String email;
+    private String tipoOperacion;
 
-    private Double salary;
+    private Double monto;
+
+    private Double destino;
+
+    private Date fechaEnvio;
+
+    private String titular;
 }

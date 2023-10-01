@@ -1,21 +1,21 @@
 package com.example.security.demo.service;
 
 
-import com.example.security.demo.DTO.DestinatarioDTO;
+import com.example.security.demo.DTO.MovimientosDTO;
 import com.example.security.demo.DTO.UserDTO;
 import com.example.security.demo.Exepciones.ErroresCustom;
 import com.example.security.demo.Exepciones.PasswordErronea;
-import com.example.security.demo.model.Destinatarios;
+import com.example.security.demo.model.Movimientos;
 import com.example.security.demo.model.UserEntity;
-import com.example.security.demo.repository.DestinatariosRepository;
+import com.example.security.demo.repository.MovimientosRepository;
 import com.example.security.demo.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
-import org.hibernate.action.internal.EntityActionVetoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -26,8 +26,7 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private DestinatariosRepository destinatariosRepository;
-
+    private MovimientosRepository movimientosRepository;
 
     public UserEntity saveUser(UserEntity userEntity){
         boolean existe;
@@ -87,12 +86,28 @@ public class UserService {
         return false;
     }
 
-    public boolean transfer(UserEntity userEntity,Destinatarios destinatario){
-        this.destinatariosRepository.save(destinatario);
-        destinatario.setSalary(destinatario.getSalary() + userEntity.getSalary());
-        userEntity.setSalary(userEntity.getSalary()-destinatario.getSalary());
-        return true;
+    public Movimientos saveOperaciones(Movimientos movimientos){
+       return this.movimientosRepository.save(movimientos);
     }
+
+
+    public List<Movimientos> gettAllListMovimientos(UserDTO userDTO){
+
+        List<Movimientos> movimientosList = this.movimientosRepository.findAll();
+        String email = userDTO.getEmail();
+
+        List<Movimientos> movimientosConEmail = new ArrayList<>();
+
+        for (Movimientos movimiento : movimientosList) {
+            if (movimiento.getTitular().equals(email)) {
+                movimientosConEmail.add(movimiento);
+            }
+        }
+
+        return movimientosConEmail;
+    }
+
+
 
 
 

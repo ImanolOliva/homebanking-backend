@@ -1,5 +1,6 @@
 package com.example.security.demo.DTO;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,9 +10,16 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DestinatarioDTO {
+public class TarjetasDTO {
 
-    private String email;
+    private String nombre;
 
-    private Double salary;
+    private Double saldo;
+
+    private Double nroTarjeta;
+
+    private String fechaVencimiento;
+
+
+
 }
