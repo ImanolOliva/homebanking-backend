@@ -163,12 +163,9 @@ public class UserController {
 
         List<MenuItemDTO> rutas = new ArrayList<>();
         rutas.add(new MenuItemDTO("Inicio","/home"));
-        rutas.add(new MenuItemDTO("Balance", "/salary"));
         rutas.add(new MenuItemDTO("Retiro dinero", "/withdrawal"));
         rutas.add(new MenuItemDTO("Deposito","/deposit"));
         rutas.add(new MenuItemDTO("Tranferencias","/transfers"));
-        rutas.add(new MenuItemDTO("Ultimos movimientos","/transacciones"));
-        rutas.add(new MenuItemDTO("Tarjetas","/tarjeta"));
         rutas.add(new MenuItemDTO("Salida","/go-out"));
 
         return rutas;
