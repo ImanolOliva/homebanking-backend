@@ -2,12 +2,15 @@ package com.example.security.demo.service;
 
 
 import com.example.security.demo.DTO.MovimientosDTO;
+import com.example.security.demo.DTO.TarjetasDTO;
 import com.example.security.demo.DTO.UserDTO;
 import com.example.security.demo.Exepciones.ErroresCustom;
 import com.example.security.demo.Exepciones.PasswordErronea;
 import com.example.security.demo.model.Movimientos;
+import com.example.security.demo.model.Tarjetas;
 import com.example.security.demo.model.UserEntity;
 import com.example.security.demo.repository.MovimientosRepository;
+import com.example.security.demo.repository.TarjetasRepository;
 import com.example.security.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +30,9 @@ public class UserService {
 
     @Autowired
     private MovimientosRepository movimientosRepository;
+
+    @Autowired
+    private TarjetasRepository tarjetasRepository;
 
     public UserEntity saveUser(UserEntity userEntity){
         boolean existe;
@@ -105,6 +111,10 @@ public class UserService {
         }
 
         return movimientosConEmail;
+    }
+
+    public Tarjetas saveTarjetas(Tarjetas tarjetas){
+       return this.tarjetasRepository.save(tarjetas);
     }
 
 

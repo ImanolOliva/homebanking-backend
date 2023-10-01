@@ -16,9 +16,11 @@ public class TarjetasDTO {
 
     private Double saldo;
 
-    private Double nroTarjeta;
+    private String nroTarjeta;
 
     private String fechaVencimiento;
+
+
 
 
 

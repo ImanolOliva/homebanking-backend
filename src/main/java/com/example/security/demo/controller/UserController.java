@@ -3,6 +3,7 @@ package com.example.security.demo.controller;
 
 import com.example.security.demo.DTO.*;
 import com.example.security.demo.model.Movimientos;
+import com.example.security.demo.model.Tarjetas;
 import com.example.security.demo.model.UserEntity;
 import com.example.security.demo.service.UserService;
 import lombok.extern.flogger.Flogger;
@@ -174,14 +175,27 @@ public class UserController {
     }
 
 
-    @GetMapping(
+    @PostMapping(
             path = "/user/v8"
     )
-    public TarjetasDTO getTarjetas(){
+    public Tarjetas getTarjetas(@RequestBody TarjetasDTO tarjetasDTO){
+        Tarjetas tarjetas = new Tarjetas();
+        //COMPLETO EL DTO
+        String fechaVencimiento = "12/25";
+        String nroTarjeta = "1234 4325 3423 5435";
+        tarjetasDTO.setNroTarjeta(nroTarjeta);
+        tarjetasDTO.setFechaVencimiento(fechaVencimiento);
 
+        //ASIGNO LOS DATOS A LA ENTIDAD
+        tarjetas.setSaldo(tarjetasDTO.getSaldo());
+        tarjetas.setNombre(tarjetasDTO.getNombre());
+        tarjetas.setNroTarjeta(tarjetasDTO.getNroTarjeta());
+        tarjetas.setFechaVencimiento(tarjetasDTO.getFechaVencimiento());
 
+        //GUARDO LOS DATOS EN LA BASE DE DATOS
+        this.userService.saveTarjetas(tarjetas);
+        return tarjetas;
     }
-
 
 
     private double automatizarSalario(String email){
