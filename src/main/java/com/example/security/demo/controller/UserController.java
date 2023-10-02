@@ -179,11 +179,11 @@ public class UserController {
     public List<MenuItemDTO> getMenuItem(){
 
         List<MenuItemDTO> rutas = new ArrayList<>();
-        rutas.add(new MenuItemDTO("Inicio","/home"));
-        rutas.add(new MenuItemDTO("Retiro dinero", "/withdrawal"));
-        rutas.add(new MenuItemDTO("Deposito","/deposit"));
-        rutas.add(new MenuItemDTO("Tranferencias","/transfers"));
-        rutas.add(new MenuItemDTO("Ultimos Movimientos","/transacciones"));
+        rutas.add(new MenuItemDTO("Inicio","https://651b43d4feb37c17f15a614e--serene-truffle-391efd.netlify.app/home"));
+        rutas.add(new MenuItemDTO("Retiro dinero", "https://651b43d4feb37c17f15a614e--serene-truffle-391efd.netlify.app/withdrawal"));
+        rutas.add(new MenuItemDTO("Deposito","https://651b43d4feb37c17f15a614e--serene-truffle-391efd.netlify.app/deposit"));
+        rutas.add(new MenuItemDTO("Tranferencias","https://651b43d4feb37c17f15a614e--serene-truffle-391efd.netlify.app/transfers"));
+        rutas.add(new MenuItemDTO("Ultimos Movimientos","https://651b43d4feb37c17f15a614e--serene-truffle-391efd.netlify.app/transacciones"));
 
         rutas.add(new MenuItemDTO("Salida","/go-out"));
 
