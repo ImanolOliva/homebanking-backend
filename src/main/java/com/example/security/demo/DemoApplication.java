@@ -19,7 +19,7 @@ public class DemoApplication {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedOrigins("https://chic-salmiakki-3e384e.netlify.app/").allowedMethods("*").allowedHeaders("*");
+				registry.addMapping("/**").allowedOrigins("https://challenge-frontendforb.netlify.app/").allowedMethods("*").allowedHeaders("*");
 			}
 		};
 	}
