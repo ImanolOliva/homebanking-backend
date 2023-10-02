@@ -30,5 +30,7 @@ public class Tarjetas {
 
     private String fechaVencimiento;
 
+    private String tipo;
+
 
 }

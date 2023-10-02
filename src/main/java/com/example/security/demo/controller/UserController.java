@@ -116,6 +116,12 @@ public class UserController {
     }
 
 
+    /**
+     * Genero las transferencias por cbu. A lo que actualizo los datos
+     * en la base de datos y a su ves armo la tabla de movimientos con los datos
+     * @param transferenciaDTO
+     * @return
+     */
     @PostMapping(
             path = "/user/v5"
     )
@@ -142,8 +148,15 @@ public class UserController {
         movimientos.setTitular(userDTO.getEmail());
         movimientos.setTipoOperacion("TRANSFERENCIA");
         this.userService.saveOperaciones(movimientos);
+
         return new ResponseEntity(userDTO,HttpStatusCode.valueOf(200));
     }
+
+    /**
+     * Obtengo todos los movimientos del usuario en sesíon
+     * @param userDTO
+     * @return movimientos del usuario
+     */
     @PostMapping(  path = "/user/v6")
     public List<Movimientos> getAllUsers(@RequestBody UserDTO userDTO){
         try{
@@ -156,6 +169,10 @@ public class UserController {
 
     }
 
+    /**
+     * Realizo menu dinamico que se venga a buscar al backend
+     * @return rutas del frontend
+     */
     @GetMapping(
             path = "/user/v7"
     )
@@ -166,35 +183,54 @@ public class UserController {
         rutas.add(new MenuItemDTO("Retiro dinero", "/withdrawal"));
         rutas.add(new MenuItemDTO("Deposito","/deposit"));
         rutas.add(new MenuItemDTO("Tranferencias","/transfers"));
+        rutas.add(new MenuItemDTO("Ultimos Movimientos","/transacciones"));
+
         rutas.add(new MenuItemDTO("Salida","/go-out"));
 
         return rutas;
     }
 
 
+    /**
+     * Devuelvo las tarjetas que el usuario en sesion tenga asociadas
+     * @param tarjetasDTO
+     * @return tarjetas
+     */
     @PostMapping(
             path = "/user/v8"
     )
-    public Tarjetas getTarjetas(@RequestBody TarjetasDTO tarjetasDTO){
-        Tarjetas tarjetas = new Tarjetas();
-        //COMPLETO EL DTO
-        String fechaVencimiento = "12/25";
-        String nroTarjeta = "1234 4325 3423 5435";
-        tarjetasDTO.setNroTarjeta(nroTarjeta);
-        tarjetasDTO.setFechaVencimiento(fechaVencimiento);
+        public List<Tarjetas> getTarjetas(@RequestBody TarjetasDTO tarjetasDTO) {
 
-        //ASIGNO LOS DATOS A LA ENTIDAD
-        tarjetas.setSaldo(tarjetasDTO.getSaldo());
-        tarjetas.setNombre(tarjetasDTO.getNombre());
-        tarjetas.setNroTarjeta(tarjetasDTO.getNroTarjeta());
-        tarjetas.setFechaVencimiento(tarjetasDTO.getFechaVencimiento());
+            List<Tarjetas> tarjetas = new ArrayList<>();
 
-        //GUARDO LOS DATOS EN LA BASE DE DATOS
-        this.userService.saveTarjetas(tarjetas);
-        return tarjetas;
-    }
+            // Tarjeta de débito con datos del DTO
+            Tarjetas tarjetaDebito = new Tarjetas();
+            tarjetaDebito.setSaldo(tarjetasDTO.getSaldo());
+            tarjetaDebito.setNombre(tarjetasDTO.getNombre());
+            tarjetaDebito.setNroTarjeta("1234 4325 3423 5435");
+            tarjetaDebito.setFechaVencimiento("12/25");
+            tarjetaDebito.setTipo("DEBITO");
+            tarjetas.add(tarjetaDebito);
+
+            // Tarjeta de crédito hardcodeada
+            Tarjetas tarjetaCredito = new Tarjetas();
+            tarjetaCredito.setSaldo(8000.00);
+            tarjetaCredito.setNombre("Tarjeta de Crédito");
+            tarjetaCredito.setNroTarjeta("9876 5432 1234 5678");
+            tarjetaCredito.setFechaVencimiento("06/28");
+            tarjetaCredito.setTipo("CREDITO");
+            tarjetas.add(tarjetaCredito);
+
+            return tarjetas;
+        }
 
 
+    /** Automatizo salario para que el usuario cuando ingrese
+     * no tenga su cuenta en 0
+     * de igual manera estan todas las operaciones para realizar
+     * @param email
+     * @return salario
+     */
     private double automatizarSalario(String email){
         return email.length() > 4?50000 : 20000;
     }

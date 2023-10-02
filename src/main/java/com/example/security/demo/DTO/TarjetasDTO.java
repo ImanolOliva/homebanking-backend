@@ -20,6 +20,8 @@ public class TarjetasDTO {
 
     private String fechaVencimiento;
 
+    private String tipo;
+
 
 
 
