@@ -170,17 +170,18 @@ public class UserController {
     }
 
     /**
-     * Realizo menu dinamico que se venga a buscar al backend
+     * Realizo menu dinamico que  venga a buscar al backend
      * @return rutas del frontend
      *
      *
-     */
+     */ 
     @GetMapping(
             path = "/user/v7"
     )
     public List<MenuItemDTO> getMenuItem(){
 
         List<MenuItemDTO> rutas = new ArrayList<>();
+
         rutas.add(new MenuItemDTO("Inicio","/home"));
         rutas.add(new MenuItemDTO("Retiro dinero", "/withdrawal"));
         rutas.add(new MenuItemDTO("Deposito","/deposit"));
