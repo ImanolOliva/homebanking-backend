@@ -173,7 +173,7 @@ public class UserController {
      * Realizo menu dinamico que se venga a buscar al backend
      * @return rutas del frontend
      *
-     * 
+     *
      */
     @GetMapping(
             path = "/user/v7"
@@ -182,12 +182,12 @@ public class UserController {
 
         List<MenuItemDTO> rutas = new ArrayList<>();
         rutas.add(new MenuItemDTO("Inicio","https://challenge-frontendforb.netlify.app/home"));
-        rutas.add(new MenuItemDTO("Retiro dinero", "https://challenge-frontendforb.netlify.app/withdrawal"));
-        rutas.add(new MenuItemDTO("Deposito","https://challenge-frontendforb.netlify.app/deposit"));
-        rutas.add(new MenuItemDTO("Tranferencias","https://challenge-frontendforb.netlify.app/transfers"));
-        rutas.add(new MenuItemDTO("Ultimos Movimientos","https://challenge-frontendforb.netlify.app/transacciones"));
+        rutas.add(new MenuItemDTO("Retiro dinero", "/withdrawal"));
+        rutas.add(new MenuItemDTO("Deposito","/deposit"));
+        rutas.add(new MenuItemDTO("Tranferencias","/transfers"));
+        rutas.add(new MenuItemDTO("Ultimos Movimientos","/transacciones"));
 
-        rutas.add(new MenuItemDTO("Salida","https://challenge-frontendforb.netlify.app/go-out"));
+        rutas.add(new MenuItemDTO("Salida","/go-out"));
 
         return rutas;
     }
