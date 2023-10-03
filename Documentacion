@@ -1,10 +1,17 @@
 # Challenge TechForb
 
+
+
 # Realización de CRUD para una simulación de sistema bancario.
 
 
 -Tecnologías
-Utilización de Java con su framework Spring Boot.
+La aplicacion esta deployada de la siguiente manera.
+BackEnd - Render
+FrontEnd - Netlify
+MYSQL - CleverCloud.
+
+Se utiliza de Java con su framework Spring Boot.
 Se utilizaron distintas dependencias para facilitar su desarrollo.
 JPA para persistir la información en la base de datos.
 Spring Web para trabajar el proyecto desde la web.
