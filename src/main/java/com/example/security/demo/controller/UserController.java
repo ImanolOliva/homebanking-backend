@@ -172,6 +172,8 @@ public class UserController {
     /**
      * Realizo menu dinamico que se venga a buscar al backend
      * @return rutas del frontend
+     *
+     * 
      */
     @GetMapping(
             path = "/user/v7"
