@@ -1,0 +1,82 @@
+# Challenge TechForb
+
+# Realización de CRUD para una simulación de sistema bancario.
+
+
+-Tecnologías
+Utilización de Java con su framework Spring Boot.
+Se utilizaron distintas dependencias para facilitar su desarrollo.
+JPA para persistir la información en la base de datos.
+Spring Web para trabajar el proyecto desde la web.
+H2 para pruebas en tiempo de desarrollo.
+Lombok para la legibilidad y prolijidad del código.
+
+-Explicación del código.
+API generada para consumir desde un frontend.
+Donde desde el controlador recibirá las peticiones y con ello trabajará el servicio,
+el repositorio y el modelo.
+Se verá que se utiliza el patrón de Diseño DTO para mover la información entre las capas de la aplicación.
+
+# A continuación se deja un detallado de cómo funciona cada método del controlador y qué función cumplen.
+
+ #########  saveUser()
+ ## El método saveUser se ejecutará cuando el usuario se registre por primera vez.
+ - Automatizará un salario para el usuario (con fines de hacerlo más dinámico) con la condición del largo de su nombre.
+ - Si pasa las validaciones (en el servicio), se persistirá al usuario en la base de datos.
+
+ ########  verifyUser()
+ ### El método verifyUser se ejecutará cuando el usuario intente logearse.
+ - Buscará en la base de datos a través de su email. (EL EMAIL SE TRABAJA COMO UN DATO IRREPETIBLE EN TODA LA APP).
+ - Si existe en base de datos, se dará paso a la aplicación.
+
+ #####  WithdrawalDiner() y DepositDiner()
+ - Son dos métodos que trabajan de forma similar.
+ Reciben los datos del usuario por parámetros de entrada y devuelven al usuario
+ sus saldos actualizados.
+
+ ########## Transferencias()
+
+    Transferencias es una entidad donde se registrarán todas las transferencias de los usuarios.
+    Recibe por parámetros los datos del usuario actual.
+    Registra las operaciones correspondientes.
+    Actualiza el salario en la tabla de usuarios.
+    Genero los datos en la tabla de Movimientos(TRANSFERENCIAS)
+    según los movimientos que haya hecho el usuario.
+    Retorno al usuario actualizado.
+
+  ######## GetMenuItem()
+   Genero una lista de menús con las rutas que utilizo en el app routing del frontend
+   para luego devolverlos en un array y así generar un menú dinámico.
+
+  ########### getTarjetas()
+
+  - Recibo los datos del usuario en sesión a través del DTO de tarjetas.
+  - Su nombre y salario actual.
+  - Se obtiene la data del usuario actual y se persiste una tarjeta de débito en la base de datos.
+  - Se obtiene la data del usuario con algunos datos hardcodeados y se persiste una tarjeta de crédito en la base de datos.
+
+   Retorna un array de tarjetas.
+   - Cada usuario tendrá su tarjeta de crédito y débito.
+
+   ############  getAllUsers()
+
+   - Recibo al usuario actual.
+   - Pregunto en el servicio por los movimientos realizados, es decir,
+   depósito de dinero, retiro de dinero, transferencias y lo guardo en un array.
+   - Retorno el array con los movimientos del usuario en sesión.
+
+    @ImanolOliva2023
+
+
+
+
+
+
+
+
+
+
+
+
+
+

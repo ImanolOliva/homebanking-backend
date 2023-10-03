@@ -24,6 +24,12 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+
+    /**
+     *
+     * @param userEntity
+     * @return
+     */
     @PostMapping( path = "/user/v1")
     public ResponseEntity<?> saveUser(@RequestBody UserEntity userEntity){
       try{
@@ -35,6 +41,8 @@ public class UserController {
       }
       return new ResponseEntity<>(userEntity,HttpStatusCode.valueOf(200));
     }
+
+
     @PostMapping( path = "/user/v2" )
     public ResponseEntity<UserDTO> verifyUser(@RequestBody UserDTO userDTO){
         String gmail = userDTO.getEmail();
@@ -117,8 +125,7 @@ public class UserController {
 
 
     /**
-     * Genero las transferencias por cbu. A lo que actualizo los datos
-     * en la base de datos y a su ves armo la tabla de movimientos con los datos
+     *
      * @param transferenciaDTO
      * @return
      */
@@ -140,7 +147,7 @@ public class UserController {
         userDTO.setSalary(salaryBd);
         this.userService.updateUser(userDTO);
 
-        //Voy armando la tabla de transacciones
+        //Armo la tabla de movimientos
         Movimientos movimientos = new Movimientos();
         movimientos.setMonto(userDTO.getSalary());
         movimientos.setFechaEnvio(new Date());
@@ -174,7 +181,7 @@ public class UserController {
      * @return rutas del frontend
      *
      *
-     */ 
+     */
     @GetMapping(
             path = "/user/v7"
     )
