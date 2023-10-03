@@ -181,7 +181,7 @@ public class UserController {
     public List<MenuItemDTO> getMenuItem(){
 
         List<MenuItemDTO> rutas = new ArrayList<>();
-        rutas.add(new MenuItemDTO("Inicio","https://challenge-frontendforb.netlify.app/home"));
+        rutas.add(new MenuItemDTO("Inicio","/home"));
         rutas.add(new MenuItemDTO("Retiro dinero", "/withdrawal"));
         rutas.add(new MenuItemDTO("Deposito","/deposit"));
         rutas.add(new MenuItemDTO("Tranferencias","/transfers"));
